@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package blog.v1;
+
+option go_package = "./";
+
+message User {
+    int64 id = 1;
+    string name = 2;
+}
