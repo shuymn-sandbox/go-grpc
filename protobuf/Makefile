@@ -1,5 +1,18 @@
+OS_TYPE := $(shell echo `uname`)
+OS_ARCH := $(shell echo `uname -m`)
+
+ifeq ($(OS_TYPE), Darwin)
+	OS_TYPE := osx
+else ifeq ($(OS_TYPE), Linux)
+	OS_TYPE := linux
+endif
+
+ifeq ($(OS_ARCH), arm64)
+	OS_ARCH := aarch_64
+endif
+
 PROTOC_VERSION := 21.5
-PROTOC_ARCH := linux-x86_64
+PROTOC_ARCH := $(OS_TYPE)-$(OS_ARCH)
 PROTOC_ZIP := protoc-$(PROTOC_VERSION)-$(PROTOC_ARCH).zip
 PROTOC := ./protoc/v$(PROTOC_VERSION)/bin/protoc
 PROTOC_OUT := ../go/protobuf/protoc
@@ -22,13 +35,17 @@ protoc:
 		--go-grpc_opt=$(PROTOC_GO_GRPC_OPT) \
 		blog/v1/post.proto blog/v1/user.proto
 
-.PHONY: clean
-clean:
+.PHONY: clean-protoc
+clean-protoc:
 	rm -rf protoc/v$(PROTOC_VERSION)
 
-.PHONY: install
-install: clean
+.PHONY: install-protoc
+install-protoc: clean-protoc
 	curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/$(PROTOC_ZIP)
 	mkdir -p ./protoc/v$(PROTOC_VERSION)
 	unzip $(PROTOC_ZIP) -d ./protoc/v$(PROTOC_VERSION)
 	rm $(PROTOC_ZIP)
+
+.PHONY: install-deps
+install-deps:
+	curl --create-dirs -Lo ./include/google/type/datetime.proto https://raw.githubusercontent.com/googleapis/googleapis/master/google/type/datetime.proto
