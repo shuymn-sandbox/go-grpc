@@ -4,7 +4,7 @@ package blog.v1;
 
 option go_package = "./";
 
-import "google/type/datetime.proto";
+import "google/protobuf/timestamp.proto";
 import "blog/v1/user.proto";
 
 enum PostStatus {
@@ -21,9 +21,9 @@ message Post {
     string title = 3;
     bytes content = 4;
     PostStatus status = 5;
-    google.type.DateTime published_at = 6;
-    google.type.DateTime created_at = 7;
-    google.type.DateTime updated_at = 8;
+    google.protobuf.Timestamp published_at = 6;
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8;
 }
 
 message GetPostRequest {

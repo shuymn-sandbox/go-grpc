@@ -26,7 +26,6 @@ buf:
 .PHONY: protoc
 protoc:
 	$(PROTOC) \
-		-I include \
 		-I protoc/v$(PROTOC_VERSION)/include \
 		-I blogapis \
 		--go_out=$(PROTOC_OUT) \
@@ -45,7 +44,3 @@ install-protoc: clean-protoc
 	mkdir -p ./protoc/v$(PROTOC_VERSION)
 	unzip $(PROTOC_ZIP) -d ./protoc/v$(PROTOC_VERSION)
 	rm $(PROTOC_ZIP)
-
-.PHONY: install-deps
-install-deps:
-	curl --create-dirs -Lo ./include/google/type/datetime.proto https://raw.githubusercontent.com/googleapis/googleapis/master/google/type/datetime.proto
